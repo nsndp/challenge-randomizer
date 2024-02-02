@@ -1,0 +1,206 @@
+/* NUMBER INPUTS */
+
+input[type=number] {
+	width: calc(100% - 1.4rem * 2);
+	min-width: 2em;
+	height: 100%;
+	margin: 0 1.4rem;
+	padding: 0;
+	font-size: 100%;
+	border: none;
+	text-align: center;
+	color: var(--odds-color);
+	background-color: var(--background-input-color);
+	-moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+td.number-holder {
+	position: relative;
+}
+
+button.number-control {
+	position: absolute;
+	top: 0;
+	width: 1.4rem;
+	height: 100%;
+	padding: 0;
+	border: none;
+	border-radius: 0;
+	background-color: inherit;
+}
+
+button.number-control:first-child {
+	left: 0;
+	border-right: var(--table-border);
+}
+
+button.number-control:last-child {
+	right: 0;
+	border-left: var(--table-border);
+}
+
+/* MAIN TABLES */
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	background-color: var(--table-background-color);
+}
+
+table th {
+	font-weight: normal;
+	font-style: italic;
+	font-size: 90%;
+	background-color: var(--table-header-color);
+}
+
+table td,
+table th {
+	margin: 0;
+	border: var(--table-border);
+}
+
+table.t-main:not(.mult) {
+	margin-bottom: 0.5em;
+}
+
+table.t-main.mult {
+	/* to collapse borders between mult and main tables */
+	margin-bottom: -1px;
+}
+
+table.t-main td,
+table.t-main th {
+	padding: 0 0.2em;
+}
+
+table.t-main td:nth-child(2) {
+	width: 20%;
+	padding: 0;
+}
+
+table.t-main td:last-child {
+	width: 20%;
+	text-align: center;
+}
+
+table.t-main th:last-child {
+	overflow-wrap: anywhere;
+}
+
+/* EXTRA TABLE */
+
+table.t-extra td {
+	padding: 0;
+}
+
+table.t-extra .col-1,
+table.t-extra .col-2 {
+	width: 42%;
+}
+
+table.t-extra .col-34 {
+	width: 16%;
+}
+
+table.t-extra th.col-34 {
+	overflow-wrap: anywhere;
+}
+
+table.t-extra .col-3 {
+	width: 16%;
+	text-align: center;
+}
+
+table.t-extra .col-4 {
+	width: 0;
+}
+
+table.t-extra .col-5 {
+	border-bottom: var(--category-header-border);
+	/* otherwise height: 100% in child buttons won't work */
+	/* it won't be actually 0, it'll use min needed height */
+	height: 0;
+	/* same thing; will be min needed height */
+	width: 0;
+}
+
+table.t-extra td.bottom-cell {
+	border-bottom: var(--category-header-border);
+}
+
+table.t-extra button.rem,
+table.t-extra button.add {
+	height: 100%;
+	border: none;
+	display: block;
+	border-radius: 0;
+}
+
+table.t-extra button.rem {
+	width: 1.5em;
+}
+
+table.t-extra button.add {
+	width: 100%;
+}
+
+table.t-extra input,
+table.t-extra textarea,
+table.t-extra select {
+	background-color: var(--background-input-color);
+}
+
+table.t-extra input[type="text"],
+table.t-extra textarea {
+	width: 100%;
+	border: none;
+	margin: 0;
+	padding: 0;
+	display: block; /* https://stackoverflow.com/a/33558894 */
+}
+
+table.t-extra input[type="text"] {
+	font-weight: bold;
+	text-indent: 0.2em;
+}
+
+table.t-extra textarea {
+	resize: none;
+	padding-left: 0.2em;
+	box-sizing: border-box;
+}
+
+table.t-extra select {
+	width: 100%;
+	border: none;
+	font-style: italic;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+table.t-extra select > option {
+	font-style: normal;
+}
+
+table.t-extra label {
+	white-space: nowrap;
+	margin: 0 0.2em;
+	font-size: 90%;
+}
+
+table.t-extra input[type="checkbox"] {
+	margin-left: 0;
+}
+
+button#btn-extra-add {
+	width: 100%;
+	font-weight: bold;
+}

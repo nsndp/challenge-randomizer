@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="scripts/main.js"></script>
+	<script type="text/javascript" src="scripts/extra.js"></script>
+	<script type="text/javascript" src="data.js"></script>
+	<link rel="stylesheet" href="styles/other.css">
+	<link rel="stylesheet" href="styles/tables.css">
+	<link rel="stylesheet" href="styles/layout.css"> <!-- layout goes last so that media queries take precedence -->
+	<link rel="stylesheet" href="styles/colors.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+	<style>
+		<!-- these are not in a separate file because we need to set them with JS -->
+		:root {
+			--art-display-width: 0px;
+			--art-display-height: 0px;
+			--secondary-art-display-width: 0px;
+		}
+	</style>
+</head>
+<body>
+	<div id="content">
+		<div id="btn-theme" onclick="ToggleTheme(this)">
+			<img>
+			<div id="theme-hint" class="popup-block">
+				<span>Dark Mode</span>
+				<span>Light Mode</span>
+			</div>
+		</div>
+		<div id="github-link">
+			<a href="https://github.com/nsndp/challenge-randomizer"><img></a>
+			<div id="github-hint" class="popup-block">GitHub Repo</div>
+		</div>
+		<h1>Challenge Randomizer</h1>
+		<div id="art-container"></div>
+		<div id="art-container-moar"></div>
+		<div id="game-container">
+			<div><label for="game-selector">Game:</label></div>
+			<div><select id="game-selector" onchange="ChangeGame()"></select></div>
+		</div>
+		<div id="customization-container" class="collapsed">
+			<button type="button" id="btn-customize" onclick="ToggleOptions()">Customize</button>
+			<div id="lists-container" style="display:none;">
+			</div>
+		</div>
+		<div id="generation-container" class="collapsed">
+			<button type="button" id="btn-generate" onclick="CreateChallenge()">Generate</button>
+			<button type="button" id="btn-clear" onclick="ClearResult()" style="display:none;">Clear</button>
+			<div id="result-container" style="display:none;">
+			</div>
+		</div>
+	</div>
+	
+	<template id="tmpl-cat-header">
+		<div class="cat-header">
+			<label class="cat-label">
+				<input type="checkbox" onchange="ToggleOnOff(this)">
+				<span></span>
+			</label>
+			<button onclick="ToggleCategory(this)">show</button>
+		</div>
+	</template>
+	
+	<template id="tmpl-cat-header-extra-hint">
+		<div class="hint-prep extra">
+			<span>This is a special editable category where each option is independent and you set their probabilities directly (0 to 100).</span>
+			<span>You can use it for additional challenges that are "present or not" rather than "1 out of N", and control their scope with conditions.</span>
+		</div>
+	</template>
+	
+	<template id="tmpl-cat-condition">
+		<div class="condition-block">
+			<span class="condition-header">Conditional:</span>
+			<span> included only if </span>
+			<span></span>
+		</div>
+	</template>
+	
+	<template id="tmpl-table">
+		<table class="t-main">
+			<tr class="hint-coord-base">
+				<th>
+					<span>Option</span>
+					<div class="hint-prep">
+						<span>When you press "Generate", one option from the table will be selected at random according to the specified odds.</span>
+						<span>If you want some option to have a higher chance of appearing, set its odds to a bigger number.</span>
+						<span>If you want to exclude some options completely, set their odds to 0.</span>
+						<span>If you leave only 1 option with non-zero odds, then it will always be selected, removing any randomness.</span>
+						<span>If you want to remove this category from selection altogether, uncheck the box above.</span>
+						<span>Probabilities on the right simply display the same odds in a more convenient form.</span>
+						<span>For more customization, like editing the categories themselves or even adding different games, visit <a href="https://github.com/nsndp/challenge-randomizer">GitHub repo</a>.</span>
+					</div>
+				</th>
+				<th>Odds</th>
+				<th>Probability</th>
+			</tr>
+		</table>
+	</template>
+	
+	<template id="tmpl-table-mult">
+		<table class="t-main mult">
+			<tr class="hint-coord-base">
+				<th>
+					<span>Select how many</span>
+					<div class="hint-prep">
+						<span>This means that selection will be repeated N times, where N is also chosen randomly (and can be configured in the same way).</span>
+					</div>
+				</th>
+				<th>Odds</th>
+				<th>Probability</th>
+			</tr>
+		</table>
+	</template>
+	
+	<template id="tmpl-row">
+		<tr>
+			<td></td>
+			<td class="number-holder">
+				<button class="number-control" onclick="NumberSub(this)">–</button>
+				<input type="number" min="0" max="100" onchange="UpdateProbs(this)">
+				<button class="number-control" onclick="NumberAdd(this)">+</button>
+			</td>
+			<td></td>
+		</tr>
+	</template>
+	
+	<template id="tmpl-table-extra">
+		<table class="t-extra">
+			<tr class="hint-coord-base">
+				<th colspan="2">
+					<span>Smartypants Name</span>
+					<div class="hint-prep">
+						<span>No plain names are allowed! It has to be as smartypants as possible.</span>
+						<span>Outdated pop culture references are ideal but lame puns will also make do.</span>
+					</div>
+				</th>
+				<th colspan="2" class="col-34">Probability, %</th>
+				<th rowspan="3"></th>
+			</tr>
+			<tr>
+				<th colspan="4">Description</th>
+			</tr>
+			<tr class="hint-coord-base">
+				<th colspan="4">
+					<span>Conditions</span>
+					<div class="hint-prep">
+						<span>A condition means that this extra should be considered only when a particular option gets (or does not get) selected.</span>
+						<span>For conditions with multiple values, NOT checkbox is enabled only for the 1st row, since it applies to the whole condition.</span>
+					</div>
+				</th>
+			</tr>
+		</table>
+		<button id="btn-extra-add" onclick="AddExtraRow()">Add new extra</button>
+	</template>
+	
+	<template id="tmpl-row-extra">
+		<tr>
+			<td colspan="2">
+				<input type="text" onchange="ChangeExtraName(this)">
+			</td>
+			<td colspan="2" class="col-34 number-holder">
+				<button class="number-control" onclick="NumberSub(this, true)">–</button>
+				<input type="number" min="0" max="100" onchange="ChangeExtraProb(this)">
+				<button class="number-control" onclick="NumberAdd(this, true)">+</button>
+			</td>
+			<td class="col-5">
+				<button class="rem" onclick="RemoveExtraRow(this)">&#x2715;</button>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				<textarea type="text" onchange="ChangeExtraDesc(this)"></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" class="bottom-cell">
+				<button class="add" onclick="AddExtraCond(this)">Add condition</button>
+			</td>
+		</tr>
+	</template>
+	
+	<template id="tmpl-extra-condition">
+		<tr>
+			<td class="col-1"><select onchange="ChangeExtraCondCat(this)"></select></td>
+			<td class="col-2"><select onchange="ChangeExtraCondOpt(this)"></select></td>
+			<td class="col-3"><label><input type="checkbox" onchange="ChangeExtraNeg(this)">NOT</label></td>
+			<td class="col-4"><button class="rem" onclick="RemoveExtraCond(this)">&#x2715;</button></td>
+		</tr>
+	</template>
+	
+	<template id="tmpl-hint">
+		<div class="hint">
+			<svg onclick="ShowHint(this)" viewBox="0 0 50 50" width="50px" height="50px">
+				<path d="
+						M 25 2 C 12.309295 2 2 12.309295 2 25 C 2 37.690705 12.309295 48 25 48 C 37.690705 
+						48 48 37.690705 48 25 C 48 12.309295 37.690705 2 25 2 z M 25 4 C 36.609824 4 46 13.390176 
+						46 25 C 46 36.609824 36.609824 46 25 46 C 13.390176 46 4 36.609824 4 25 C 4 13.390176 
+						13.390176 4 25 4 z M 25 11 A 3 3 0 0 0 22 14 A 3 3 0 0 0 25 17 A 3 3 0 0 0 28 14 A 3 3 0 0 0 
+						25 11 z M 21 21 L 21 23 L 22 23 L 23 23 L 23 36 L 22 36 L 21 36 L 21 38 L 22 38 L 23 38 L 27 
+						38 L 28 38 L 29 38 L 29 36 L 28 36 L 27 36 L 27 21 L 26 21 L 22 21 L 21 21 z
+						"/>
+			</svg>
+			<div class="popup-block">
+				<div class="popup-text"></div>
+				<div class="popup-controls">
+					<div class="close" onclick="CloseHint(this)">&#x2716;</div><!--https://stackoverflow.com/a/44731398-->
+					<div class="arrow" onclick="ShowNextHintPart(this)">&#x25BA;</div>
+				</div>
+			</div>
+		</div>
+	</template>
+	
+	<template id="tmpl-result-line">
+		<div class="result-line">
+			<span></span><span>: </span>
+			<span class="result-value"></span>
+		</div>
+	</template>
+	
+	<template id="tmpl-result-extra">
+		<div class="result-line-ex">
+			<span class="result-extra"></span>
+			<span>–</span>
+			<span></span>
+		</div>
+	</template>
+</body>
+</html>

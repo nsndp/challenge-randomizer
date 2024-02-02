@@ -1,0 +1,230 @@
+:root {
+	--base-font-size: 1.2em;
+	--content-max-w: 1500px;
+	--content-max-h: 850px;
+	--area-margin: 10px;
+	--art-margin-x: 20px;
+	--art-margin-y: 10px;
+	--res-column-w-raw: 350px;
+	--res-column-w1: calc(var(--res-column-w-raw) + var(--area-margin) * 1);
+	--res-column-w2: calc(var(--res-column-w-raw) + var(--area-margin) * 2);
+	--border-radius: 4px;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	font-family: 'Roboto Slab', serif;
+	font-size: var(--base-font-size);
+	color: var(--text-color);
+	background-color: var(--background-outer-color);
+	margin: 0;
+	display: grid;
+	grid-template-columns: auto minmax(0, var(--content-max-w)) auto;
+	grid-template-rows: 1fr minmax(0, var(--content-max-h)) 2fr;
+	grid-template-areas:
+		"margin1 margin1 margin1"
+		"margin2 CONTENT margin3"
+		"margin4 margin4 margin4"
+	;
+}
+
+button, input, select, textarea {
+	font-family: 'Roboto Slab', serif;
+	font-size: calc(var(--base-font-size) * 0.75);
+	border-radius: var(--border-radius);
+	color: var(--text-color);
+}
+
+div#content {
+	position: relative;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+	background-color: var(--background-inner-color);
+	grid-area: CONTENT;
+    display: grid;
+    /*grid-template-columns: auto var(--res-column-w1) 1fr auto;*/
+	grid-template-columns: auto 0.36fr 0.64fr auto;
+    grid-template-rows: min-content min-content 1fr;
+    grid-template-areas:
+        "HEAD HEAD HEAD HEAD"
+		"ART  GAME GAME ART2"
+		"ART  RES  MAIN ART2"
+	;
+}
+
+h1 {
+	grid-area: HEAD;
+	text-align: center;
+	margin: 0.1em 35px;
+}
+
+div#art-container,
+div#art-container-moar {
+	text-align: center;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+div#art-container {
+	grid-area: ART;
+	width: calc(var(--art-display-width) + var(--art-margin-x) * 2);
+}
+
+div#art-container-moar {
+	grid-area: ART2;
+	/* subtracting one area-margin because customization-container has it on the right */
+	width: calc(var(--secondary-art-display-width) + var(--art-margin-x) * 2 - var(--area-margin));
+}
+
+img.art {
+	margin: var(--art-margin-y) var(--art-margin-x);
+	width: var(--art-display-width);
+}
+
+div#art-container-moar > img.art {
+	/* subtracting one area-margin because customization-container has it on the right */
+	margin-left: calc(var(--art-margin-x) - var(--area-margin));
+	width: var(--secondary-art-display-width);
+}
+
+div#game-container {
+	grid-area: GAME;
+	padding: 0 var(--area-margin) var(--area-margin) 0;
+}
+
+div#customization-container {
+	grid-area: MAIN;
+	overflow: auto;
+	margin: 0  var(--area-margin) var(--area-margin) 0;
+	background-color: var(--background-customization-color);
+}
+
+div#generation-container {
+	grid-area: RES;
+	overflow: auto;
+	margin: 0 var(--area-margin) var(--area-margin) 0;
+	background-color: var(--background-generation-color);
+	display: grid;
+	grid-template-columns: 1fr var(--area-margin) 1fr;
+	grid-template-rows: auto 1fr;
+	grid-template-areas:
+		"RES-GEN res-marg RES-CLEAR"
+		"RES-TXT RES-TXT  RES-TXT"
+	;
+	align-items: center;
+}
+
+div#generation-container.collapsed {
+	display: block;
+}
+
+div#generation-container.collapsed > button#btn-generate,
+div#customization-container.collapsed > button#btn-customize {
+	width: 100%;
+	height: 100%;
+	font-size: 150%;
+}
+
+button#btn-generate {
+	grid-area: RES-GEN;
+}
+
+button#btn-clear {
+	grid-area: RES-CLEAR;
+}
+
+div#result-container {
+	grid-area: RES-TXT;
+	text-align: center;
+	margin: 0.4em;
+}
+
+@media screen and (max-width: 1300px) {
+	div#content {
+		grid-template-columns: auto var(--res-column-w1) 1fr;
+		grid-template-rows: min-content min-content 1fr;
+		grid-template-areas:
+			"HEAD HEAD HEAD"
+			"ART  GAME GAME"
+			"ART  RES  MAIN"
+		;
+	}
+	div#art-container-moar {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 992px) {
+	div#content {
+		grid-template-columns: var(--res-column-w2) 1fr;
+		grid-template-rows: min-content min-content min-content 1fr;
+		grid-template-areas:
+			"HEAD HEAD"
+			"ART  ART"
+			"GAME GAME"
+			"RES  MAIN"
+		;
+	}
+	div#art-container {
+		display: block;
+		width: 100%;
+		height: calc(var(--art-display-height) + var(--art-margin-y) * 2);
+	}
+	div#generation-container {
+		margin-left: var(--area-margin);
+	}
+	img.art {
+		width: unset;
+		height: var(--art-display-height);
+	}
+}
+
+@media screen and (max-width: 768px) {
+	body {
+		display: block;
+	}
+	div#content {
+		display: block;
+		/* to stop the bottom-most margin from being excluded from the area */
+		padding-bottom: 1px;
+	}
+	h1 {
+		/* chaning margin to padding so that background color fills everything */
+		padding: 0.1em 35px;
+		margin: 0;
+	}
+	div#customization-container {
+		margin-left: var(--area-margin);
+	}
+	div#generation-container {
+		/* moving regen/clear buttons down */
+		grid-template-rows: 1fr auto;
+		grid-template-areas:
+			"RES-TXT RES-TXT  RES-TXT"
+			"RES-GEN res-marg RES-CLEAR"
+		;
+	}
+	div#result-container {
+		margin: 0 0 0.4em 0;
+	}
+}
+
+/* making font smaller for mobile */
+@media screen and (max-width: 400px) {
+	:root {
+		--base-font-size: 1.1em;
+	}
+	table.t-main td:first-child {
+		font-size: 95%;
+	}
+	div.condition-block {
+		font-size: 85%;
+		text-align: center;
+	}
+}

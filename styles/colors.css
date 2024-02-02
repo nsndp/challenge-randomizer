@@ -1,0 +1,54 @@
+:root {
+	--text-color: #000000;
+	--background-outer-color: #f7f7f7;
+	--background-inner-color: #ffffff;
+	--button-color: #efefef;
+	--button-color-hover: #e5e5e5;
+	--button-color-click: #cccccc;
+	--text-color-disabled: #aaaaaa;
+	--table-header-color: #dddddd;
+	
+	--condition-color: #f54c40;
+	--odds-color: #53a7ff;
+	--info-icon-color: #666666;
+	--hint-text-color: #ffffff;
+	--hint-bckg-color: #717171;
+	
+	--button-border: 1px solid #cccccc;
+	--category-header-border: 1px solid #555555;
+	--table-border: 1px solid #aaaaaa;
+	
+	--background-input-color: var(--background-inner-color);
+	--background-game-selector-color: var(--button-color);
+	--background-customization-color: var(--background-inner-color);
+	--background-generation-color: var(--background-inner-color);
+	--table-background-color: var(--background-inner-color);
+}
+
+body.dark {
+	color-scheme: dark;
+	
+	--text-color: #f1f1f1;
+	--background-outer-color: #282828;
+	--background-inner-color: #0f0f0f;
+	--button-color: #2a2a2a;
+	--button-color-hover: #323232;
+	--button-color-click: #404040;
+	--text-color-disabled: #a0a0a0;
+	--table-header-color: #323232;
+	--input-number-color: #000000;
+	
+	--info-icon-color: #f1f1f1;
+	--hint-text-color: #000000;
+	--hint-bckg-color: #d1d1d1;
+	
+	--button-border: 1px solid #5a5a5a;
+	--category-header-border: 1px solid #999999;
+	--table-border: 1px solid #555555;
+	
+	--background-input-color: var(--background-inner-color);
+	--background-game-selector-color: var(--button-color);
+	--background-customization-color: var(--background-inner-color);
+	--background-generation-color: var(--background-inner-color);
+	--table-background-color: var(--background-inner-color);
+}
