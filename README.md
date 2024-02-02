@@ -15,4 +15,4 @@ https://nsndp.github.io/challenge-randomizer
 A more convenient option for general use. Any edits to odds/probabilities or extras are saved automatically in the browser's local storage, so you don't have to customize from scratch every session (unless an update was pushed, but that should be a very rare occurence).
 
 ### Local version
-Download all files, open `main.html` in a browser directly from the disk, then edit DATA object in `data.js` and just refresh the page. Choose this option if you want to edit categories/options themselves or add new games. Customization through the browser page will still get saved in the storage, but any changes to DATA will take precedence and overwrite it.
+Download all files, open `index.html` in a browser directly from the disk, then edit DATA object in `data.js` and just refresh the page. Choose this option if you want to edit categories/options themselves or add new games. Customization through the browser page will still get saved in the storage, but any changes to DATA will take precedence and overwrite it.
