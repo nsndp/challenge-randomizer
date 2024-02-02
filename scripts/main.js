@@ -1,6 +1,3 @@
-//https://www.debigare.com/randomizers/
-//github pages: https://stackoverflow.com/a/40913384
-
 STOR_VAR_T = 'challenge_randomizer_theme';
 STOR_VAR_D = 'challenge_randomizer_data';
 STOR_VAR_H = 'challenge_randomizer_hash';
